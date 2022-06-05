@@ -2,9 +2,8 @@ const http = require('http');
 const app = require('./app');
 
 const normalizePort = val => {
-    // parseInt(string, base);
     const port = parseInt(val, 10);
-    // isNAN=> is not a number
+
     if (isNaN(port)) {
         return val;
     }

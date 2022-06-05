@@ -1,9 +1,18 @@
 const express = require('express');
-
+const mongoose = require('mongoose');
 const app = express();
 
-app.use(express.json());
 
+mongoose.connect('mongodb+srv://paf:bPfjzoRB4idlJpky@cluster0.dulnduu.mongodb.net/?retryWrites=true&w=majority', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(err => console.log('Connexion à MongoDB échouée !') + err);
+
+
+
+/* erreurs de cors */
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -11,12 +20,18 @@ app.use((req, res, next) => {
     next();
 });
 
+/* post */
+/* ce middleware nous permet de recuperer le corps json*/
+app.use(express.json());
+
 app.post('/api/stuff', (req, res, next) => {
     console.log(req.body);
     res.status(201).json({
         message: 'Objet créé !'
     });
 });
+
+/* end post */
 
 app.get('/api/stuff', (req, res, next) => {
     const stuff = [{
