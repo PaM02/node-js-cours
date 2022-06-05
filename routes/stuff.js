@@ -1,19 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const Thing = require('../models/thing');
+const stuffCtrl = require('../controllers/stuff');
 
-router.post('/', (req, res, next) => {
 
-    // supprimer la requete _id
-    delete req.body._id;
-    const thing = new Thing({
-        ...req.body
-    });
-    thing.save()
-        .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
-        .catch(error => res.status(400).json({ error }));
-});
+router.post('/', stuffCtrl.createThing);
 
 /* router.post('/api/stuff', (req, res, next) => {
     console.log(req.body);
@@ -25,32 +16,16 @@ router.post('/', (req, res, next) => {
 /* end post */
 
 /* delete */
-router.delete('/:id', (req, res, next) => {
-    Thing.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
-        .catch(error => res.status(400).json({ error }));
-});
+router.delete('/:id', stuffCtrl.deleteThing);
 
 /* put pour modifier */
-router.put('/:id', (req, res, next) => {
-    Thing.updateOne({ _id: req.params.id }, {...req.body, _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Objet modifié !' }))
-        .catch(error => res.status(400).json({ error }));
-});
+router.put('/:id', stuffCtrl.modifyThing);
 
 /* request get */
 
-router.get('/:id', (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then(thing => res.status(200).json(thing))
-        .catch(error => res.status(404).json({ error }));
-});
+router.get('/:id', stuffCtrl.getOneThing);
 
-router.get('/', (req, res, next) => {
-    Thing.find()
-        .then(things => res.status(200).json(things))
-        .catch(error => res.status(400).json({ error }));
-});
+router.get('/', stuffCtrl.getAllStuff);
 
 // router.get('/api/stuff', (req, res, next) => {
 //     const stuff = [{
